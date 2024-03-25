@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Authentication</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="loginContainer">
+    <h2>Login</h2>
+    <div class="error-message" id="loginErrorMessage"></div>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p>Don't have an account? <a href="#" onclick="showRegistration()">Register here</a></p>
+</div>
+
+<div class="container" id="registrationContainer" style="display: none;">
+    <h2>Register</h2>
+    <div class="error-message" id="registrationErrorMessage"></div>
+    <input type="text" id="newUsername" placeholder="New Username">
+    <input type="password" id="newPassword" placeholder="New Password">
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+</div>
+
+<div class="container" id="securedPage" style="display: none;">
+    <h2>Welcome to Secured Page</h2>
+    <p>This is a secured page that can only be accessed after successful login.</p>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+var users = [];
+
+function showRegistration() {
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("registrationContainer").style.display = "block";
+}
+
+function showLogin() {
+    document.getElementById("registrationContainer").style.display = "none";
+    document.getElementById("loginContainer").style.display = "block";
+}
+
+function register() {
+    var newUsername = document.getElementById("newUsername").value;
+    var newPassword = document.getElementById("newPassword").value;
+
+    if (newUsername.trim() === "" || newPassword.trim() === "") {
+        document.getElementById("registrationErrorMessage").innerText = "Username and password are required.";
+    } else {
+       
+        var encryptedPassword = btoa(newPassword);
+
+       
+        users.push({ username: newUsername, password: encryptedPassword });
+        alert("Registration successful! You can now login.");
+        showLogin();
+    }
+}
+
+function login() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    var encryptedPassword = btoa(password);
+
+   
+    var user = users.find(u => u.username === username);
+
+    if (user && user.password === encryptedPassword) {
+        document.getElementById("loginErrorMessage").innerText = "";
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("securedPage").style.display = "block";
+    } else {
+        document.getElementById("loginErrorMessage").innerText = "Invalid username or password.";
+    }
+}
+
+function logout() {
+    document.getElementById("securedPage").style.display = "none";
+    document.getElementById("loginContainer").style.display = "block";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+}
+
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secured Page</title>
+</head>
+<body>
+
+<h2>Welcome to the Secured Page</h2>
+<p>This page is accessible only after successful login.</p>
+
+</body>
+</html>
+
+</body>
+</html>
